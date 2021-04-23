@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script type="module" src="/assets/js/index.js"></script>
+
+    <title>Screen sharing</title>
+    <meta name="color-scheme" content="dark light">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Share your screen with anyone.">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-dark-5@0.1/dist/css/bootstrap-night.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="/assets/css/room.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css">
+    <script>
+
+        let pref = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches; // true if the user prefers dark mode
+        let ls = window.localStorage.getItem('dark-theme');
+        let darkThemeEnabled = ls !== null ? ls === "true" : pref;
+
+
+        function initTheme() {
+            if (darkThemeEnabled) {
+                document.styleSheets[0].disabled = true;
+                document.styleSheets[1].disabled = false;
+            } else {
+                document.styleSheets[0].disabled = false;
+                document.styleSheets[1].disabled = true;
+            }
+        }
+
+        initTheme();
+
+        function changeTheme() {
+            darkThemeEnabled = !darkThemeEnabled;
+            window.localStorage.setItem('dark-theme', darkThemeEnabled);
+            initTheme();
+        }
+
+        let darkSwitch
+        window.addEventListener("load", () => {
+            darkSwitch = document.getElementById('darkSwitch');
+            darkSwitch.checked = darkThemeEnabled;
+            darkSwitch.addEventListener('change', changeTheme);
+        });
+    </script>
+</head>
+
+<body>
+    <div class="container-fluid mt-2">
+        <div class="row">
+            <div class="col-12">
+                <span id="name"></span>
+                <div class="float-end">
+                    <div class="form-check form-switch d-flex align-items-center justify-content-center">
+                        <input class="form-check-input me-1" type="checkbox" id="darkSwitch">
+                        <label class="form-check-label darkSwitchLabel" for="darkSwitch">
+                            <span><i class="bi bi-sun" title="Switch to light mode"></i></span>
+                            <span><i class="bi bi-moon-fill" title="Switch to dark mode"></i></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-2">
+            <div class="col-12 col-md-9">
+                <div class="card border-secondary">
+                    <div class="card-header" id="selectedVideoName">Video</div>
+                    <div class="s-container" id="selectedContainer">
+                        <div class="ratio ratio-16x9" id="selectedContainer">
+                            <video autoplay playsinline id="selectedVideo">
+                            </video>
+                            <div class="h-100 w-100 text-center text-primary btn" id="addButton">
+                                <div style="margin-top: 15%;" class="mb-4">
+                                    <h1>Select a device to start sharing</h1>
+                                </div>
+                                <div style="margin-top: 5%;">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="currentColor"
+                                        class="bi bi-plus-square" viewBox="0 0 16 16">
+                                        <path
+                                            d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z" />
+                                        <path
+                                            d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
+                                    </svg>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="d-flex flex-row card controlButton" id="volumeContainer">
+                            <input type="range" value="100" class="form-range d-inline mx-1" id="volume">
+                        </div>
+                        <button class="btn btn-secondary fullscreenButton controlButton" id="fullscreenButton"
+                            aria-label="Fullscreen"><i class="bi bi-fullscreen"></i></button>
+                    </div>
+                </div>
+                <div class="card mt-4">
+                    <div class="card-header">
+                        Your video
+                    </div>
+                    <div class="row m-1" id="sources">
+                        <div class="col-6 col-md-4 col-lg-3 col-xl-2">
+                            <div class="ratio ratio-16x9 card h-100">
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item d-flex align-items-center justify-content-center h-50 dButton"
+                                        id="displayAddButton">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                            fill="currentColor" class="bi bi-display" viewBox="0 0 16 16">
+                                            <path
+                                                d="M0 4s0-2 2-2h12s2 0 2 2v6s0 2-2 2h-4c0 .667.083 1.167.25 1.5H11a.5.5 0 0 1 0 1H5a.5.5 0 0 1 0-1h.75c.167-.333.25-.833.25-1.5H2s-2 0-2-2V4zm1.398-.855a.758.758 0 0 0-.254.302A1.46 1.46 0 0 0 1 4.01V10c0 .325.078.502.145.602.07.105.17.188.302.254a1.464 1.464 0 0 0 .538.143L2.01 11H14c.325 0 .502-.078.602-.145a.758.758 0 0 0 .254-.302 1.464 1.464 0 0 0 .143-.538L15 9.99V4c0-.325-.078-.502-.145-.602a.757.757 0 0 0-.302-.254A1.46 1.46 0 0 0 13.99 3H2c-.325 0-.502.078-.602.145z" />
+                                        </svg>
+                                    </li>
+                                    <li class="list-group-item d-flex align-items-center justify-content-center h-50 dButton"
+                                        id="videoAddButton">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                            fill="currentColor" class="bi bi-camera-video" viewBox="0 0 16 16">
+                                            <path fill-rule="evenodd"
+                                                d="M0 5a2 2 0 0 1 2-2h7.5a2 2 0 0 1 1.983 1.738l3.11-1.382A1 1 0 0 1 16 4.269v7.462a1 1 0 0 1-1.406.913l-3.111-1.382A2 2 0 0 1 9.5 13H2a2 2 0 0 1-2-2V5zm11.5 5.175 3.5 1.556V4.269l-3.5 1.556v4.35zM2 4a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h7.5a1 1 0 0 0 1-1V5a1 1 0 0 0-1-1H2z" />
+                                        </svg>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-3">
+                <div class="card">
+                    <div class="card-header">
+                        Users
+                    </div>
+                    <div class="card-body p-3" id="users">
+                        <span class="text-center no-users">You are alone in this room.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="cameraModal" tabindex="-1"
+        aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Choose a camera</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="modal-body row">
+                        <div class="col-auto">
+                            <label for="modalCamera" class="form-label">Camera</label>
+                            <select class="form-select" aria-label="Camera select" id="modalCamera"></select>
+                        </div>
+                        <div class="col-auto">
+                            <label for="modalMicrophone" class="form-label">Microphone</label>
+                            <select class="form-select" aria-label="Microphone select" id="modalMicrophone"></select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="modalSave">Ok</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>

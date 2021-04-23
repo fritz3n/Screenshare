@@ -1,0 +1,15 @@
+{
+  "name": "websocket-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "server": "ts-node src/index.ts"
+  },
+  "dependencies": {
+    "@types/ws": "^7.4.1",
+    "ts-node": "^9.1.1",
+    "typescript": "^3.9.9",
+    "ws": "^7.4.5"
+  }
+}

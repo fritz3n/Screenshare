@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Screen sharing</title>
+        <meta name="color-scheme" content="dark light">
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="Share your screen with anyone.">
+
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">   
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-dark-5@0.1/dist/css/bootstrap-night.min.css" rel="stylesheet">
+
+        <link rel="stylesheet" href="/assets/css/room.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css">
+        <script>
+            let pref = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches; // true if the user prefers dark mode
+            let ls = window.localStorage.getItem('dark-theme'); 
+            let darkThemeEnabled = ls !== null ? ls === "true" : pref;
+
+
+            function initTheme(){
+                if(darkThemeEnabled){
+                    document.styleSheets[0].disabled = true;
+                    document.styleSheets[1].disabled = false;
+                }else{
+                    document.styleSheets[0].disabled = false;
+                    document.styleSheets[1].disabled = true;
+                }
+            }
+
+            initTheme();
+
+            function changeTheme(){
+                darkThemeEnabled = !darkThemeEnabled;
+                window.localStorage.setItem('dark-theme', darkThemeEnabled);
+                initTheme();
+            }
+
+            let darkSwitch
+            window.addEventListener( "load", ()=>{
+                darkSwitch = document.getElementById('darkSwitch');
+                darkSwitch.checked = darkThemeEnabled;
+                darkSwitch.addEventListener('change', changeTheme);
+            });
+        </script>
+        <script>
+            window.addEventListener("load", ()=>{
+                let join = document.getElementById("join");
+                let room = document.getElementById("room");
+                
+                function joinRoom(){
+                    if(room.value){
+                        window.location.href = "room/" + encodeURIComponent(room.value);
+                    }
+                }
+
+                room.addEventListener("keydown", (e)=>{
+                    if(e.key === "Enter"){
+                        joinRoom();
+                    }
+                });
+                join.addEventListener("click", joinRoom);
+            });
+        </script>
+    </head>
+    <body>
+        <div class="container-fluid mt-2">
+            <div class="row mb-5">
+                <div class="col-12">
+                    <span id="name"></span>
+                    <div class="float-end">
+                        <div class="form-check form-switch d-flex align-items-center justify-content-center">
+                            <input class="form-check-input me-1" type="checkbox" id="darkSwitch">
+                            <label class="form-check-label darkSwitchLabel" for="darkSwitch">
+                                <span><i class="bi bi-sun" title="Switch to light mode"></i></span>
+                                <span><i class="bi bi-moon-fill" title="Switch to dark mode"></i></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-5">
+                <div class="col">
+                    <div class="d-flex flex-row justify-content-center">
+                        <div class="card w-25">
+                            <div class="card-header py-3">Screen sharing</div>
+                            <div class="card-body">
+                                <div class="input-group my-2">
+                                  <input type="text" class="form-control" placeholder="Room name" aria-label="room name" id="room">
+                                  <button class="btn btn-success" type="button" id="join">Create/Join</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
+</html>

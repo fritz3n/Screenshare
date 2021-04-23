@@ -1,0 +1,122 @@
+.card {
+    overflow: hidden;
+}
+
+.v-container{
+    overflow: hidden;
+    position: relative;
+    border-radius: 0.25em;
+}
+
+.closeButton {
+    text-align: center;
+    position: absolute;
+    top: -50px;
+    right: 20px;
+    padding: 0;
+    transition: top 200ms, background-color 200ms, color 200ms;
+    z-index: 500;
+    cursor: pointer;
+    color: var(--bs-danger);
+    background-color: #1f1f1f;
+    border-radius: 0.25em;
+    border: 1px var(--bs-danger) solid;
+    font-size: 1.25rem;
+    line-height: 1.25rem;
+    height: 1.5rem;
+}
+.closeButton:hover {
+    background-color: var(--bs-danger);
+    color: #ffffff;
+}
+
+.v-container:hover .closeButton {
+    top: 10px;
+}
+
+.no-users {
+    display: none;
+}
+
+.no-users:last-child {
+    display: block;
+}
+
+.s-container{
+    overflow: hidden;
+    position: relative;
+    border-radius: 0.25em;
+}
+
+.fullscreenButton {
+    position: absolute;
+    bottom: 10px;
+    right: -50px;
+    transition: right 50ms, background-color 200ms, color 200ms !important;
+    z-index: 500;
+    /*border-color: rgba(0, 0, 0, 0) !important;
+    background-color: rgba(0, 0, 0, 0) !important;*/
+}
+
+.s-container:hover .fullscreenButton {
+    right: 10px;
+}
+
+video::-webkit-media-controls {
+    display:none !important;
+}
+
+#volumeContainer{
+    position: absolute;
+    bottom: 10px;
+    left: -200px;
+    transition: left 50ms, background-color 200ms, color 200ms !important;
+    z-index: 500;
+    border-color: rgba(0, 0, 0, 0) !important;
+    background-color: rgba(0, 0, 0, 0) !important;
+}
+
+.s-container:hover #volumeContainer {
+    left: 10px;
+}
+
+#volume:disabled {
+    display: none !important;
+}
+
+.dButton {
+    cursor: pointer;
+}
+
+.dButton:hover {
+    background-color: var(--bs-secondary);
+}
+
+#selectedContainer:not(.selected) .controlButton{
+    display: none !important;
+}
+
+.selected video {
+    z-index: 100;
+}
+
+#addButton{
+    z-index: 1000;
+    background-color: inherit;
+}
+
+.selected  #addButton {
+    display: none;
+}
+
+.darkSwitchLabel * {
+    display: none;
+}
+
+#darkSwitch:not(:checked) ~ .darkSwitchLabel *:first-child {
+    display: inline;
+}
+
+#darkSwitch:checked ~ .darkSwitchLabel *:last-child {
+    display: inline;
+}
