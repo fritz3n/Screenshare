@@ -4,16 +4,14 @@ export const roomname = window.location.search !== "" ? window.location.search :
 
 export function getName(){
     //try to get name form disk
-    let dname = window.localStorage.getItem('name');
-    //let dname;
-    if(!dname){
-        // Only request the names if it isn't saved
-        
-        let prename = names[Math.round(Math.random()*names.length)]
+    let storedName = window.localStorage.getItem('name');
+    if(!storedName){
+        let randomName = names[Math.round(Math.random()*names.length)]
 
-        dname = (prompt("Please enter your name", prename) || prename).trim() + " #" + Math.round(Math.random()*10000);
+        storedName = (prompt("Please enter your name", randomName) || randomName).trim();
     }
-    document.getElementById("name").innerText = dname;
-    window.localStorage.setItem('name', dname);
-    return dname;
+    let name = storedName + " #" + Math.round(Math.random()*10000)
+    document.getElementById("name").innerText = name;
+    window.localStorage.setItem('name', storedName);
+    return name;
 }
