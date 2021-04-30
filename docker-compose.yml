@@ -22,8 +22,5 @@ services:
         networks:
             - ss-backend
 
-
-
 networks:
     ss-backend:
-    

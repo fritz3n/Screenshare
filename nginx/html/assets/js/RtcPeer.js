@@ -135,12 +135,6 @@ export class RtcPeer {
         if(this.destroyed)
             return;
         window.comms.sendRtc({type: 'ice', ice: event.candidate}, this.remoteName);
-        if(!event.candidate){
-            await this.renegotiate();
-        }else{
-            window.comms.sendRtc({type: 'ice', ice: event.candidate}, this.remoteName);
-
-        }
     }
 
     async receiveIce(ice){
